@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 
 
@@ -28,13 +28,23 @@ export default {
 
   async findAllFinances(req, res){
     try {
-      const finance = await prisma.finance.findMany({
+      const { page = 1, pageSize = 10 } = req.query;
+      const offset = (page - 1) * pageSize;
+      const [finance, total] = await prisma.$transaction(
+      [
+        prisma.finance.findMany({
         orderBy: {
           id: 'desc',
         },
-      });
+        skip: offset,
+        take: Number(pageSize),
+        }),
+        prisma.finance.count()
+      ])
+        const TotalPages = Math.ceil(total / pageSize)
 
-      return res.status(200).json(finance);
+      return res.status(200).json({TotalPages, total, finance});
+
 
     } catch (error) {
 
@@ -94,38 +104,16 @@ export default {
     }
   },
 
-  async findAllFinance(req, res){
-    try {
-      const { search, take, skip } = req.params;
-
-      const results = await prisma.finance.findMany({
-        where: {
-          titulo: {
-            contains: search,
-            mode: 'insensitive',
-          }
-        },
-        take: Number(take),
-        skip: Number(skip),
-      });
-      return res.status(200).json(results);
-    } catch (error) {
-      
-      return res.status(400).json({msg: 'Erro ao listar finances por Params! ' + error});
-    
-    }
-  },
-
   async findValores(req, res){
     try {
-      const finance = await prisma.finance.groupBy({
+      const financeValor = await prisma.finance.groupBy({
         by: ['categoria'],
         _sum: {
           valor: true,
         }
       });
       
-      return res.status(200).json(finance);
+      return res.status(200).json(financeValor);
 
     } catch (error) {
 

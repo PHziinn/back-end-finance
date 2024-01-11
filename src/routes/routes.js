@@ -11,11 +11,9 @@ router.get('/finances', FinanceControllers.findAllFinances);
 // Route Lista por IDs
 router.get('/finance/:id', FinanceControllers.findFinance);
 // Route Deleta Finances
-router.delete('/finance/:id', FinanceControllers.deleteFinance);
-// Route de Buscas
-router.get('/search', FinanceControllers.findAllFinance);
-// Route GroupBy
-router.get('/pesquisa/finance/categorias', FinanceControllers.findValores);
+router.delete('/deletar/finance/:id', FinanceControllers.deleteFinance);
+// Route GroupBy Somar Finances
+router.get('/calcular/finance', FinanceControllers.findValores);
 
 
 export {router};
