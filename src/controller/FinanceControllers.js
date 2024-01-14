@@ -7,10 +7,11 @@ export default {
   async createFinance(req, res){
     try {
       const {data, titulo, valor, categoria} = req.body;
+      const dataFormatada = data.split('-').reverse().join('/');
 
       const finance = await prisma.finance.create({
         data: {
-          data,
+          data: dataFormatada,
           titulo,
           valor,
           categoria,
