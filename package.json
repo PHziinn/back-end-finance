@@ -5,7 +5,9 @@
   "description": "Projeto de banco de dados feito com PostgreSQL para armazenar valores do front End",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "vercel-build": "npx prisma generate && npx prisma migrate deploy"
   },
   "author": "Wesley",
   "license": "MIT",
